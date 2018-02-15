@@ -1,6 +1,6 @@
 <?php
 
-namespace Ameotoko\IsotopeEventsBundle;
+namespace Ameotoko\IsotopeEvents;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
