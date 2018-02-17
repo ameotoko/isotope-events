@@ -14,3 +14,7 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['location'] = array
   'attributes'            => array('legend'=>'general_legend'),
 );
 
+// Concert datetime attribute
+$GLOBALS['TL_DCA']['tl_iso_product']['list']['label']['label_callback'] = array('Isotope\Backend\Product\CustomLabel', 'generate');
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['begin']['sorting'] = true;
+
