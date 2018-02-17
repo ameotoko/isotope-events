@@ -1,5 +1,6 @@
 {
   "name": "ameotoko/isotope-events",
+  "time": "2012-02-16 17:45:00",
   "authors": [
     {
       "name": "Andrey Vinichenko",
@@ -16,7 +17,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Ameotoko\\IsotopeEvents\\": "src/"
+      "Ameotoko\\IsotopeEvents\\": "src/",
+      "Isotope\\": "src/Resources/contao/library/Isotope/"
     }
   },
   "extra": {
