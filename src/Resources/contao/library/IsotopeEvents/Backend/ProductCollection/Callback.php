@@ -36,9 +36,18 @@ class CustomCallback extends Callback
 
 		if (null !== $objAddress) {
 			$arrTokens = $objAddress->getTokens(Isotope::getConfig()->getBillingFieldsConfig());
-			$args[2]   = 'XXX '.$arrTokens['hcard_fn'];
+			$args[2]   = $arrTokens['hcard_fn'];
 		}
 
+		$arrOrderItems = $objOrder->getItems();
+		$firstItem = array_shift($arrOrderItems);
+		$strNames = $firstItem->getName();
+		foreach ($arrOrderItems as $objOrderItem) {
+			$strNames .= ', '.$objOrderItem->getName();
+		}
+
+		$args[2] .= sprintf(' <span style="color: #c4c4c4;">(%s)</span>', $strNames);
+		
 		$args[3] = Isotope::formatPriceWithCurrency($row['total']);
 
 		/** @var \Isotope\Model\OrderStatus $objStatus */
@@ -48,7 +57,6 @@ class CustomCallback extends Callback
 			$args[4] = '<span>' . $objOrder->getStatusLabel() . '</span>';
 		}
 
-		dump($args);
 		return $args;
 	}
 }
