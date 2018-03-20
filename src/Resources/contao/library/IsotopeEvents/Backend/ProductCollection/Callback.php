@@ -39,15 +39,6 @@ class CustomCallback extends Callback
 			$args[2]   = $arrTokens['hcard_fn'];
 		}
 
-		$arrOrderItems = $objOrder->getItems();
-		$firstItem = array_shift($arrOrderItems);
-		$strNames = $firstItem->getName();
-		foreach ($arrOrderItems as $objOrderItem) {
-			$strNames .= ', '.$objOrderItem->getName();
-		}
-
-		$args[2] .= sprintf(' <span style="color: #c4c4c4;">(%s)</span>', $strNames);
-		
 		$args[3] = Isotope::formatPriceWithCurrency($row['total']);
 
 		/** @var \Isotope\Model\OrderStatus $objStatus */
@@ -56,6 +47,14 @@ class CustomCallback extends Callback
 		} else {
 			$args[4] = '<span>' . $objOrder->getStatusLabel() . '</span>';
 		}
+
+		$strNames = array();
+
+		foreach ($objOrder->getItems() as $objOrderItem) {
+			$strNames[] = $objOrderItem->getName();
+		}
+
+		$args[5] = sprintf('<span style="color: #a6a6a6;">%s</span>', implode(', ', $strNames));
 
 		return $args;
 	}
