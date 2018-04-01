@@ -1,0 +1,5 @@
+<p>
+	<a href="<?= $this->href; ?>" title="<?= $this->label_detail; ?>">
+		<?= $this->generateAttribute ('name'); ?>
+	</a>
+</p>

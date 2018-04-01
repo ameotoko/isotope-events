@@ -9,3 +9,6 @@ $GLOBALS['ISO_MOD']['config']['location'] = array
   'tables'            => array('tl_iso_location'),
   'icon'              => 'bundles/ameotokoisotopeevents/img/setup-locations.png',
 );
+
+// Mini calendar module
+$GLOBALS['FE_MOD']['isotope']['iso_productlist'] = 'IsotopeEvents\Module\ProductListCalendar';
