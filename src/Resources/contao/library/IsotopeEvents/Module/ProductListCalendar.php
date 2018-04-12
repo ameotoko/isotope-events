@@ -6,7 +6,8 @@ use Contao\CoreBundle\Exception\PageNotFoundException;
 use Isotope\Module\ProductList;
 
 /**
- * @property mixed cal_startDay
+ * @property mixed       cal_startDay
+ * @property array|mixed arrEvents
  */
 class ProductListCalendar extends ProductList
 {
@@ -22,17 +23,21 @@ class ProductListCalendar extends ProductList
 	 */
 	protected $strUrl;
 
+	protected $arrEvents;
+
 	/**
 	 * Template
 	 * @var string
 	 */
-	//protected $strTemplate = 'mod_iso_productlist_cal_mini';
+	protected $strTemplate = 'mod_iso_productlist_cal_mini';
 
 	protected function compile()
 	{
 		parent::compile ();
-
-		$this->generateCalendar();
+//dump ($this->Template->products);
+		if ($this->asCalendar) {
+			$this->generateCalendar ();
+		}
 	}
 
 	private function generateCalendar()
@@ -64,7 +69,7 @@ class ProductListCalendar extends ProductList
 		$objMinMax = $this->Database->query("SELECT MIN(begin) AS dateFrom, MAX(begin) AS dateTo FROM tl_iso_product WHERE pid = 0" . (!BE_USER_LOGGED_IN ? " AND (start='' OR start<='$time') AND (stop='' OR stop>'" . ($time + 60) . "') AND published='1'" : "")); // TODO: limit by categories
 
 		/** @var FrontendTemplate|object $objTemplate */
-		$objTemplate = new \FrontendTemplate($this->iso_list_layout);
+		$objTemplate = new \FrontendTemplate('iso_list_cal_mini');
 
 		// Store year and month
 		$intYear = date('Y', $this->Date->tstamp);
@@ -176,7 +181,8 @@ class ProductListCalendar extends ProductList
 
 		$intColumnCount = -1;
 		$intNumberOfRows = ceil(($intDaysInMonth + $intFirstDayOffset) / 7);
-		$arrAllEvents = $this->getAllEvents($this->cal_calendar, $this->Date->monthBegin, $this->Date->monthEnd); // TODO: Override this with products
+
+		$arrAllEvents = $this->getAllEvents($this->Date->monthBegin, $this->Date->monthEnd); // TODO: Override this with products
 		$arrDays = array();
 
 		// Compile days
@@ -242,5 +248,295 @@ class ProductListCalendar extends ProductList
 		}
 
 		return $arrDays;
+	}
+
+	/**
+	 * Get all events of a certain period (original: calendar-bundle/Events)
+	 *
+	 * @param array   $arrCalendars
+	 * @param integer $intStart
+	 * @param integer $intEnd
+	 *
+	 * @return array
+	 */
+	protected function getAllEvents($intStart, $intEnd)
+	{
+		//if (!\is_array($arrCalendars))
+		//{
+		//	return array();
+		//}
+		//
+		$this->arrEvents = array();
+
+		foreach ($this->Template->products as $arrEvent)
+		{
+			// Get the events of the current period
+			//$objEvents = \CalendarEventsModel::findCurrentByPid($id, $intStart, $intEnd);
+
+			//if ($objEvents === null)
+			//{
+			//	continue;
+			//}
+
+			//while ($objEvents->next())
+			//{
+			$objEvent = $arrEvent['product'];
+				$this->addEvent($objEvent, $objEvent->begin, ($objEvent->end) ?: $objEvent->begin, $intStart, $intEnd, $id);
+
+				// Recurring events
+				//if ($objEvents->recurring)
+				//{
+				//	$arrRepeat = \StringUtil::deserialize($objEvents->repeatEach);
+				//
+				//	if (!\is_array($arrRepeat) || !isset($arrRepeat['unit']) || !isset($arrRepeat['value']) || $arrRepeat['value'] < 1)
+				//	{
+				//		continue;
+				//	}
+				//
+				//	$count = 0;
+				//	$intStartTime = $objEvents->startTime;
+				//	$intEndTime = $objEvents->endTime;
+				//	$strtotime = '+ ' . $arrRepeat['value'] . ' ' . $arrRepeat['unit'];
+				//
+				//	while ($intEndTime < $intEnd)
+				//	{
+				//		if ($objEvents->recurrences > 0 && $count++ >= $objEvents->recurrences)
+				//		{
+				//			break;
+				//		}
+				//
+				//		$intStartTime = strtotime($strtotime, $intStartTime);
+				//		$intEndTime = strtotime($strtotime, $intEndTime);
+				//
+				//		// Stop if the upper boundary is reached (see #8445)
+				//		if ($intStartTime === false || $intEndTime === false)
+				//		{
+				//			break;
+				//		}
+				//
+				//		// Skip events outside the scope
+				//		if ($intEndTime < $intStart || $intStartTime > $intEnd)
+				//		{
+				//			continue;
+				//		}
+				//
+				//		$this->addEvent($objEvents, $intStartTime, $intEndTime, $intStart, $intEnd, $id);
+				//	}
+				//}
+			//}
+		}
+
+		// Sort the array
+		foreach (array_keys($this->arrEvents) as $key)
+		{
+			ksort($this->arrEvents[$key]);
+		}
+
+		// HOOK: modify the result set
+		if (isset($GLOBALS['TL_HOOKS']['getAllEvents']) && \is_array($GLOBALS['TL_HOOKS']['getAllEvents']))
+		{
+			foreach ($GLOBALS['TL_HOOKS']['getAllEvents'] as $callback)
+			{
+				$this->import($callback[0]);
+				$this->arrEvents = $this->{$callback[0]}->{$callback[1]}($this->arrEvents, $this->Template->products, $intStart, $intEnd, $this);
+			}
+		}
+
+		return $this->arrEvents;
+	}
+
+	/**
+	 * Add an event to the array of active events
+	 *
+	 * @param CalendarEventsModel $objEvents
+	 * @param integer             $intStart
+	 * @param integer             $intEnd
+	 * @param integer             $intBegin
+	 * @param integer             $intLimit
+	 * @param integer             $intCalendar
+	 */
+	protected function addEvent($objEvent, $intStart, $intEnd, $intBegin, $intLimit, $intCalendar)
+	{
+		/** @var PageModel $objPage */
+		global $objPage;
+
+		// Backwards compatibility (4th argument was $strUrl)
+		if (\func_num_args() > 6)
+		{
+			@trigger_error('Calling Events::addEvent() with 7 arguments has been deprecated and will no longer work in Contao 5.0. Do not pass $strUrl as 4th argument anymore.', E_USER_DEPRECATED);
+
+			$intLimit = func_get_arg(5);
+			$intCalendar = func_get_arg(6);
+		}
+
+		$intDate = $intStart;
+		$intKey = date('Ymd', $intStart);
+		$strDate = \Date::parse($objPage->dateFormat, $intStart);
+		$strDay = $GLOBALS['TL_LANG']['DAYS'][date('w', $intStart)];
+		$strMonth = $GLOBALS['TL_LANG']['MONTHS'][(date('n', $intStart)-1)];
+		$span = \Calendar::calculateSpan($intStart, $intEnd);
+
+		if ($span > 0)
+		{
+			$strDate = \Date::parse($objPage->dateFormat, $intStart) . $GLOBALS['TL_LANG']['MSC']['cal_timeSeparator'] . \Date::parse($objPage->dateFormat, $intEnd);
+			$strDay = '';
+		}
+
+		$strTime = '';
+
+		if ($objEvent->addTime)
+		{
+			if ($span > 0)
+			{
+				$strDate = \Date::parse($objPage->datimFormat, $intStart) . $GLOBALS['TL_LANG']['MSC']['cal_timeSeparator'] . \Date::parse($objPage->datimFormat, $intEnd);
+			}
+			elseif ($intStart == $intEnd)
+			{
+				$strTime = \Date::parse($objPage->timeFormat, $intStart);
+			}
+			else
+			{
+				$strTime = \Date::parse($objPage->timeFormat, $intStart) . $GLOBALS['TL_LANG']['MSC']['cal_timeSeparator'] . \Date::parse($objPage->timeFormat, $intEnd);
+			}
+		}
+
+		$until = '';
+		$recurring = '';
+
+		// Recurring event
+		//if ($objEvents->recurring)
+		//{
+		//	$arrRange = \StringUtil::deserialize($objEvents->repeatEach);
+		//
+		//	if (\is_array($arrRange) && isset($arrRange['unit']) && isset($arrRange['value']))
+		//	{
+		//		$strKey = 'cal_' . $arrRange['unit'];
+		//		$recurring = sprintf($GLOBALS['TL_LANG']['MSC'][$strKey], $arrRange['value']);
+		//
+		//		if ($objEvents->recurrences > 0)
+		//		{
+		//			$until = sprintf($GLOBALS['TL_LANG']['MSC']['cal_until'], \Date::parse($objPage->dateFormat, $objEvents->repeatEnd));
+		//		}
+		//	}
+		//}
+
+		// Store raw data
+		//$arrEvent = $objEvents->row();
+
+		// Overwrite some settings
+		$arrEvent['date'] = $strDate;
+		$arrEvent['time'] = $strTime;
+		$arrEvent['datetime'] = $objEvent->addTime ? date('Y-m-d\TH:i:sP', $intStart) : date('Y-m-d', $intStart);
+		$arrEvent['day'] = $strDay;
+		$arrEvent['month'] = $strMonth;
+		//$arrEvent['parent'] = $intCalendar;
+		//$arrEvent['calendar'] = $objEvent->getRelated('pid');
+		$arrEvent['link'] = $objEvent->name;
+		$arrEvent['target'] = '';
+		$arrEvent['title'] = \StringUtil::specialchars($objEvent->name, true);
+
+		// Use the first category of the event to generate url
+		$arrEvent['href'] = $objEvent->generateUrl(\PageModel::findByPk($objEvent->getCategories()[0]));
+		//$arrEvent['class'] = ($objEvent->cssClass != '') ? ' ' . $objEvent->cssClass : '';
+		//$arrEvent['recurring'] = $recurring;
+		$arrEvent['until'] = $until;
+		$arrEvent['begin'] = $intStart;
+		$arrEvent['end'] = $intEnd;
+		$arrEvent['details'] = '';
+		$arrEvent['hasDetails'] = false;
+		$arrEvent['hasTeaser'] = false;
+
+		// Override the link target
+		//if ($objEvent->source == 'external' && $objEvent->target)
+		//{
+		//	$arrEvent['target'] = ' target="_blank"';
+		//}
+		//
+		// Clean the RTE output
+		if ($objEvent->teaser)
+		{
+			$arrEvent['hasTeaser'] = true;
+			$arrEvent['teaser'] = \StringUtil::toHtml5($objEvent->teaser);
+			$arrEvent['teaser'] = \StringUtil::encodeEmail($arrEvent['teaser']);
+		}
+
+		// Display the "read more" button for external/article links
+		//if ($objEvent->source != 'default')
+		//{
+		//	$arrEvent['details'] = true;
+		//	$arrEvent['hasDetails'] = true;
+		//}
+
+		// Compile the event text
+		//else
+		//{
+		//	$id = $objEvent->id;
+		//
+		//	$arrEvent['details'] = function () use ($id)
+		//	{
+		//		$strDetails = '';
+		//		$objElement = \ContentModel::findPublishedByPidAndTable($id, 'tl_calendar_events');
+		//
+		//		if ($objElement !== null)
+		//		{
+		//			while ($objElement->next())
+		//			{
+		//				$strDetails .= $this->getContentElement($objElement->current());
+		//			}
+		//		}
+		//
+		//		return $strDetails;
+		//	};
+		//
+		//	$arrEvent['hasDetails'] = function () use ($id)
+		//	{
+		//		return \ContentModel::countPublishedByPidAndTable($id, 'tl_calendar_events') > 0;
+		//	};
+		//}
+
+		// Get todays start and end timestamp
+		if ($this->intTodayBegin === null)
+		{
+			$this->intTodayBegin = strtotime('00:00:00');
+		}
+		if ($this->intTodayEnd === null)
+		{
+			$this->intTodayEnd = strtotime('23:59:59');
+		}
+
+		// Mark past and upcoming events (see #3692)
+		if ($intEnd < $this->intTodayBegin)
+		{
+			$arrEvent['class'] .= ' bygone';
+		}
+		elseif ($intStart > $this->intTodayEnd)
+		{
+			$arrEvent['class'] .= ' upcoming';
+		}
+		else
+		{
+			$arrEvent['class'] .= ' current';
+		}
+
+		$this->arrEvents[$intKey][$intStart][] = $arrEvent;
+
+		// Multi-day event
+		for ($i=1; $i<=$span; $i++)
+		{
+			// Only show first occurrence
+			if ($this->cal_noSpan)
+			{
+				break;
+			}
+
+			$intDate = strtotime('+1 day', $intDate);
+
+			if ($intDate > $intLimit)
+			{
+				break;
+			}
+
+			$this->arrEvents[date('Ymd', $intDate)][$intDate][] = $arrEvent;
+		}
 	}
 }
