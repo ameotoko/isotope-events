@@ -12,3 +12,7 @@ $GLOBALS['ISO_MOD']['config']['location'] = array
 
 // Mini calendar module
 $GLOBALS['FE_MOD']['isotope']['iso_productlist'] = 'IsotopeEvents\Module\ProductListCalendar';
+
+// Use content elements in products
+$GLOBALS['BE_MOD']['isotope']['iso_products']['tables'][] = 'tl_content';
+$GLOBALS['FE_MOD']['isotope']['iso_productreader'] = 'Isotope\Module\ProductReaderCustom';
