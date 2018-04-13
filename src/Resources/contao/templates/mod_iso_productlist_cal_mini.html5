@@ -1,1 +1,7 @@
-<?= $this->calendar; ?>
+<?php $this->extend('block_unsearchable'); ?>
+
+<?php $this->block('content'); ?>
+
+	<?= $this->calendar; ?>
+
+<?php $this->endblock(); ?>

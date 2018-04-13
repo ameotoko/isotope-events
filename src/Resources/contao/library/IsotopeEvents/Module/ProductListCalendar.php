@@ -31,6 +31,15 @@ class ProductListCalendar extends ProductList
 	 */
 	protected $strTemplate = 'mod_iso_productlist_cal_mini';
 
+	public function generate()
+	{
+		if ($this->asCalendar) {
+			$this->type = 'event_calendar';
+		}
+
+		return parent::generate ();
+	}
+
 	protected function compile()
 	{
 		parent::compile ();
