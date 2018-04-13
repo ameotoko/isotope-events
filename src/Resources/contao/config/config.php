@@ -16,3 +16,6 @@ $GLOBALS['FE_MOD']['isotope']['iso_productlist'] = 'IsotopeEvents\Module\Product
 // Use content elements in products
 $GLOBALS['BE_MOD']['isotope']['iso_products']['tables'][] = 'tl_content';
 $GLOBALS['FE_MOD']['isotope']['iso_productreader'] = 'Isotope\Module\ProductReaderCustom';
+
+// Add option to format price as integer
+$GLOBALS['ISO_NUM']["10,000"]    = array(0, '.', ",");
