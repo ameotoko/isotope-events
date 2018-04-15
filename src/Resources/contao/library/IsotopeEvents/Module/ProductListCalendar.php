@@ -3,6 +3,7 @@
 namespace IsotopeEvents\Module;
 
 use Contao\CoreBundle\Exception\PageNotFoundException;
+use Haste\Http\Response\HtmlResponse;
 use Isotope\Module\ProductList;
 
 /**
@@ -132,6 +133,12 @@ class ProductListCalendar extends ProductList
 		$objTemplate->substr = $GLOBALS['TL_LANG']['MSC']['dayShortLength'];
 
 		$this->Template->calendar = $objTemplate->parse();
+		$this->Template->id = $this->id;
+
+		if (\Environment::get('isAjaxRequest') && \Input::post('FORM_SUBMIT') == 'calendar') {
+			$objResponse = new HtmlResponse($this->Template->calendar);
+			$objResponse->send();
+		}
 	}
 
 	/**

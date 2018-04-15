@@ -2,6 +2,16 @@
 
 <?php $this->block('content'); ?>
 
-	<?= $this->calendar; ?>
+	<div class="inside">
+		<div class="cal_content">
+			<?= $this->calendar; ?>
+		</div>
+
+		<div class="ui inverted dimmer">
+			<div class="ui loader">
+			</div>
+		</div>
+	</div>
+
 
 <?php $this->endblock(); ?>

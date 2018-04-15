@@ -25,3 +25,21 @@
 	<?php endforeach; ?>
 	</tbody>
 </table>
+
+<script>
+	$(function () {
+	    $('.mod_event_calendar table thead a').on('click', function (e) {
+					e.preventDefault();
+					$('.mod_event_calendar .inside').dimmer('show');
+					$.post(e.target.href,
+							{
+							    "REQUEST_TOKEN": "<?= REQUEST_TOKEN ?>",
+									"FORM_SUBMIT": "calendar"
+							})
+							.done(function (response) {
+                  $('.mod_event_calendar .inside').dimmer('hide');
+                  $('.mod_event_calendar .inside .cal_content').html(response);
+              }); // TODO: error handling
+      });
+  });
+</script>
