@@ -19,3 +19,6 @@ $GLOBALS['FE_MOD']['isotope']['iso_productreader'] = 'Isotope\Module\ProductRead
 
 // Add option to format price as integer
 $GLOBALS['ISO_NUM']["10,000"]    = array(0, '.', ",");
+
+// Inserttags
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = ['IsotopeEvents\Helper', 'replaceInsertTags'];
