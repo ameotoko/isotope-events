@@ -6,7 +6,7 @@ $GLOBALS['TL_DCA']['tl_iso_product_collection']['list']['label']['label_callback
 $GLOBALS['TL_DCA']['tl_iso_product_collection']['list']['label']['fields'][] = 'config_id';
 
 if ('BE' == TL_MODE && \Input::get('do') == 'iso_orders') {
-	$GLOBALS['TL_DCA']['tl_iso_product_collection']['fields']['billing_address_id']['label'] = 'Name';
+	$GLOBALS['TL_DCA']['tl_iso_product_collection']['fields']['billing_address_id']['label'] = ['Name'];
 	$GLOBALS['TL_DCA']['tl_iso_product_collection']['fields']['config_id']['label'] = 'Events';
 }
 
@@ -20,3 +20,6 @@ $GLOBALS['TL_DCA']['tl_iso_product_collection']['config']['onload_callback'][] =
 // Don't need this filter
 $GLOBALS['TL_DCA']['tl_iso_product_collection']['fields']['shipping_id']['filter'] = false;
 
+// Search orders in backend by the client's last name
+$GLOBALS['TL_DCA']['tl_iso_product_collection']['fields']['billing_address_id']['search'] = true;
+$GLOBALS['TL_DCA']['tl_iso_product_collection']['fields']['billing_address_id']['foreignKey'] = \Isotope\Model\Address::getTable().'.lastname';
