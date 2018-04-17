@@ -25,14 +25,15 @@ $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panel_callback']['past'
 $GLOBALS['TL_DCA']['tl_iso_product']['config']['onload_callback']['past'] = ['Isotope\Backend\Product\CustomPanel', 'apply_filter'];
 
 // Use content elements in products
-$GLOBALS['TL_DCA']['tl_iso_product']['config']['ctable'][] = 'tl_content';
-$GLOBALS['TL_DCA']['tl_iso_product']['list']['operations']['edit']['href'] = 'table=tl_content';
 
-array_insert($GLOBALS['TL_DCA']['tl_iso_product']['list']['operations'], 1, array(
-	'editheader' => array
-	(
-		'label'             => &$GLOBALS['TL_LANG']['tl_iso_product']['edit'],
-		'href'              => 'act=edit',
-		'icon'              => 'header.svg'
-	)
-));
+if (\Input::get('do') == 'iso_products' && !\Input::get('id')) {
+	$GLOBALS['TL_DCA']['tl_iso_product']['config']['ctable'][] = 'tl_content';
+	$GLOBALS['TL_DCA']['tl_iso_product']['list']['operations']['edit']['href'] = 'table=tl_content';
+	array_insert($GLOBALS['TL_DCA']['tl_iso_product']['list']['operations'], 1, [
+		'editheader' => [
+			'label' => &$GLOBALS['TL_LANG']['tl_iso_product']['edit'],
+			'href'  => 'act=edit',
+			'icon'  => 'header.svg'
+		]
+	]);
+}
