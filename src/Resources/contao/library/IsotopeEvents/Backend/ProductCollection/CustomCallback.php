@@ -90,7 +90,7 @@ class CustomCallback extends Callback
 
 		$strHtml = '<div class="tl_subpanel" style="width: 60%">
 		<strong>Filter events:</strong>
-		<select name="eventsFilter" id="eventsFilter" class="tl_select" style="width: 70%; margin-left: 3px;">
+		<select name="eventsFilter" id="eventsFilter" class="tl_select" style="width: 70%; margin-left: 3px;" onchange="this.form.submit();">
 		  <option value="eventsFilter">Event</option>
 		  <option value="eventsFilter">---</option>';
 
