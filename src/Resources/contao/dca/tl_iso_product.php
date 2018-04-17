@@ -17,6 +17,7 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['location'] = array
 // Concert datetime attribute
 $GLOBALS['TL_DCA']['tl_iso_product']['list']['label']['label_callback'] = array('Isotope\Backend\Product\CustomLabel', 'generate');
 $GLOBALS['TL_DCA']['tl_iso_product']['fields']['begin']['sorting'] = true;
+$GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['fields'] = ['begin'];
 
 // Custom filter: Show/Hide past events
 $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panelLayout'] = str_replace(';filter;', ';filter,past;', $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panelLayout']);
