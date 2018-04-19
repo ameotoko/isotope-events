@@ -451,8 +451,7 @@ class ProductListCalendar extends ProductList
 		$arrEvent['target'] = '';
 		$arrEvent['title'] = \StringUtil::specialchars($objEvent->name, true);
 
-		// Use the first category of the event to generate url
-		$arrEvent['href'] = $objEvent->generateUrl(\PageModel::findByPk($objEvent->getCategories()[0]));
+		$arrEvent['href'] = $objEvent->generateUrl($this->findJumpToPage($objEvent));
 		//$arrEvent['class'] = ($objEvent->cssClass != '') ? ' ' . $objEvent->cssClass : '';
 		//$arrEvent['recurring'] = $recurring;
 		$arrEvent['until'] = $until;
