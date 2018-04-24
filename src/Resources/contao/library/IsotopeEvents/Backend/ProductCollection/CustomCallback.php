@@ -20,7 +20,8 @@ class CustomCallback extends Callback
 	 * @param \DataContainer $dc
 	 * @param array          $args
 	 *
-	 * @return string
+	 * @return array
+	 * @throws \Exception
 	 */
 	public function getOrderLabel($row, $label, \DataContainer $dc, $args)
 	{

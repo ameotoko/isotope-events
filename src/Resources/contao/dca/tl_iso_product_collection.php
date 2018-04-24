@@ -3,7 +3,7 @@
 $GLOBALS['TL_DCA']['tl_iso_product_collection']['list']['label']['label_callback'] = ['IsotopeEvents\Backend\ProductCollection\CustomCallback', 'getOrderLabel'];
 
 // We need to use on of existing fields and replace it with our contents, so we don't alter the table
-$GLOBALS['TL_DCA']['tl_iso_product_collection']['list']['label']['fields'][] = 'config_id';
+$GLOBALS['TL_DCA']['tl_iso_product_collection']['list']['label']['fields'] = array('document_number', 'locked', 'billing_address_id', 'total', 'order_status', 'config_id');
 
 if ('BE' == TL_MODE && \Input::get('do') == 'iso_orders') {
 	$GLOBALS['TL_DCA']['tl_iso_product_collection']['fields']['billing_address_id']['label'] = ['Name'];
