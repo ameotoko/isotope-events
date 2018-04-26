@@ -1,5 +1,46 @@
 <?php
 
+// Additional fields
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['begin'] = array
+(
+	'label'							=> &$GLOBALS['TL_LANG']['tl_iso_product']['begin'],
+	'exclude'						=> false,
+	'inputType'					=> 'text',
+	'sql'								=> 'int(10) unsigned',
+	'eval'							=> array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
+	'attributes'				=> array('legend' => 'general_legend')
+);
+
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['end'] = array
+(
+	'label'							=> &$GLOBALS['TL_LANG']['tl_iso_product']['end'],
+	'exclude'						=> false,
+	'inputType'					=> 'text',
+	'sql'								=> 'int(10) unsigned',
+	'eval'							=> array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
+	'attributes'				=> array('legend' => 'general_legend')
+);
+
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['addtime'] = array
+(
+	'label'							=> &$GLOBALS['TL_LANG']['tl_iso_product']['addtime'],
+	'exclude'						=> false,
+	'inputType'					=> 'checkbox',
+	'sql'								=> "char(1) not null default ''",
+	'eval'							=> array('tl_class'=>'w50'),
+	'attributes'				=> array('legend' => 'general_legend')
+);
+
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['available'] = array
+(
+	'label'							=> &$GLOBALS['TL_LANG']['tl_iso_product']['available'],
+	'exclude'						=> false,
+	'inputType'					=> 'checkbox',
+	'sql'								=> "char(1) not null default ''",
+	'eval'							=> array('tl_class'=>'w50'),
+	'attributes'				=> array('legend' => 'publish_legend')
+);
+
 // Location feature
 $GLOBALS['TL_DCA']['tl_iso_product']['fields']['location'] = array
 (
