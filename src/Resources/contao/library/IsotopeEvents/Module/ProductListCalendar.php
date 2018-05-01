@@ -32,6 +32,15 @@ class ProductListCalendar extends ProductList
 	 */
 	protected $strTemplate = 'mod_iso_productlist_cal_mini';
 
+	/**
+	 * Cache products. Can be disable in a child class, e.g. a "random products list"
+	 * @var boolean
+	 *
+	 * @deprecated Deprecated since version 2.3, to be removed in 3.0.
+	 *             Implement getCacheKey() to always cache result.
+	 */
+	protected $blnCacheProducts = false;
+	
 	public function generate()
 	{
 		if ($this->asCalendar) {
@@ -553,5 +562,15 @@ class ProductListCalendar extends ProductList
 
 			$this->arrEvents[date('Ymd', $intDate)][$intDate][] = $arrEvent;
 		}
+	}
+
+	/**
+	 * Return empty string to turn cache off.
+	 *
+	 * @return string A 32 char cache key (e.g. MD5)
+	 */
+	protected function getCacheKey()
+	{
+		return '';
 	}
 }
