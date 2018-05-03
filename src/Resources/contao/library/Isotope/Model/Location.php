@@ -22,6 +22,7 @@ use Isotope\Translation;
  * @property string $city
  * @property string $state
  * @property $country
+ * @property $note
  */
 class Location extends \Model
 {

@@ -118,7 +118,7 @@ $GLOBALS['TL_DCA']['tl_iso_location'] = array
     // Palettes
     'palettes' => array
     (
-        'default'                   => '{name_legend},name;{address_legend},street,postal,city,state,country;{publish_legend},published',
+        'default'                   => '{name_legend},name;{address_legend},street,postal,city,state,country,note;{publish_legend},published',
     ),
 
     // Fields
@@ -200,6 +200,16 @@ $GLOBALS['TL_DCA']['tl_iso_location'] = array
             'inputType'               => 'checkbox',
             'eval'                    => array('doNotCopy'=>true),
             'sql'                     => "char(1) NOT NULL default ''"
+        ),
+        'note' => array
+        (
+            'label'                   => &$GLOBALS['TL_LANG']['tl_iso_location']['note'],
+            'exclude'                 => true,
+            'filter'                  => false,
+            'search'                  => true,
+            'inputType'               => 'textarea',
+            'eval'                    => array('rte' => 'tinyMCE', 'tl_class' => 'clr'),
+            'sql'                     => "text NULL"
         ),
     )
 );

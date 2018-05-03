@@ -7,6 +7,7 @@ $GLOBALS['TL_LANG']['tl_iso_location']['city'] = ['City'];
 $GLOBALS['TL_LANG']['tl_iso_location']['state'] = ['State'];
 $GLOBALS['TL_LANG']['tl_iso_location']['country'] = ['Country'];
 $GLOBALS['TL_LANG']['tl_iso_location']['published'] = ['Publish location'];
+$GLOBALS['TL_LANG']['tl_iso_location']['note'] = ['Note', 'Additional information, e.g. how to get there.'];
 
 $GLOBALS['TL_LANG']['tl_iso_location']['new'] = ['New location'];
 $GLOBALS['TL_LANG']['tl_iso_location']['edit'] = ['Edit location ID %s'];
