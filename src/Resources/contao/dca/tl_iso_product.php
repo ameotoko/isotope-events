@@ -61,10 +61,12 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['begin']['sorting'] = true;
 $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['fields'] = ['begin'];
 
 // Custom filter: Show/Hide past events
-$GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panelLayout'] = str_replace(';filter;', ';filter,past;', $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panelLayout']);
-$GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panel_callback']['past'] = ['Isotope\Backend\Product\CustomPanel', 'add_filter'];
-
-$GLOBALS['TL_DCA']['tl_iso_product']['config']['onload_callback']['past'] = ['Isotope\Backend\Product\CustomPanel', 'apply_filter'];
+if (!\Input::get('id')) {
+	$GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panelLayout'] = str_replace(';filter;', ';filter,past;', $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panelLayout']);
+	$GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panel_callback']['past'] = ['Isotope\Backend\Product\CustomPanel', 'add_filter'];
+	
+	$GLOBALS['TL_DCA']['tl_iso_product']['config']['onload_callback']['past'] = ['Isotope\Backend\Product\CustomPanel', 'apply_filter'];
+}
 
 // Use content elements in products
 
