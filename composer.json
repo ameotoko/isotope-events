@@ -1,6 +1,6 @@
 {
   "name": "ameotoko/isotope-events",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "authors": [
     {
       "name": "Andrey Vinichenko",
@@ -10,7 +10,7 @@
   "type": "contao-bundle",
   "require": {
     "php": ">=7.1",
-    "contao/core-bundle": "~4.4.14"
+    "contao/core-bundle": "^4.5"
   },
   "require-dev": {
     "contao/manager-plugin": "^2.0"
