@@ -82,7 +82,10 @@ class CustomCallback extends Callback
 				// Only unique products in array
 				$arrOptions[$objProduct->getProductId()] = [
 					'id' => $objProduct->getProductId(),
-					'name' => $objProduct->getName()
+					'name' => sprintf('[%s] %s',
+						\Date::parse('d.m.Y', $objProduct->begin),
+						$objProduct->getName()
+					)
 				];
 			}
 		}
@@ -91,7 +94,7 @@ class CustomCallback extends Callback
 
 		$strHtml = '<div class="tl_subpanel" style="width: 60%">
 		<strong>Filter events:</strong>
-		<select name="eventsFilter" id="eventsFilter" class="tl_select" style="width: 70%; margin-left: 3px;" onchange="this.form.submit();">
+		<select name="eventsFilter" id="eventsFilter" class="tl_select tl_chosen" style="width: 70%; margin-left: 3px;" onchange="this.form.submit();">
 		  <option value="eventsFilter">Event</option>
 		  <option value="eventsFilter">---</option>';
 
