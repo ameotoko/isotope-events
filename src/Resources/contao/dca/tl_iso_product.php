@@ -70,7 +70,7 @@ if (!\Input::get('id')) {
 
 // Use content elements in products
 
-if (\Input::get('do') == 'iso_products' && !\Input::get('id')) {
+if (\Input::get('do') == 'iso_products' && (!\Input::get('id') || \Input::get('act') == 'copy' || \Input::get('act') == 'delete')) {
 	$GLOBALS['TL_DCA']['tl_iso_product']['config']['ctable'][] = 'tl_content';
 	$GLOBALS['TL_DCA']['tl_iso_product']['list']['operations']['edit']['href'] = 'table=tl_content';
 	array_insert($GLOBALS['TL_DCA']['tl_iso_product']['list']['operations'], 1, [
@@ -81,3 +81,6 @@ if (\Input::get('do') == 'iso_products' && !\Input::get('id')) {
 		]
 	]);
 }
+
+// Publish variants by default when copying a product
+$GLOBALS['TL_DCA']['tl_iso_product']['config']['oncopy_callback'][] = ['Isotope\Backend\Product\DcaManagerCustom', 'publishNewVariant'];
