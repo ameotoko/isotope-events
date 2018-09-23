@@ -22,3 +22,6 @@ $GLOBALS['ISO_NUM']["10,000"]    = array(0, '.', ",");
 
 // Inserttags
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = ['IsotopeEvents\Helper', 'replaceInsertTags'];
+
+// Clean up variants in case of cancelled copying of product
+$GLOBALS['TL_HOOKS']['reviseTable'][] = ['Isotope\Backend\Product\DcaManagerCustom', 'onReviseTable'];
