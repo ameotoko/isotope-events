@@ -32,7 +32,7 @@ class DcaManagerCustom extends DcaManager
 	 */
 	public function onReviseTable($strTable, $newRecords)
 	{
-		if ('tl_iso_product' == $strTable) {
+		if ('tl_iso_product' == $strTable && \is_array($newRecords)) {
 			foreach ($newRecords as $newRecord) {
 				\Database::getInstance()->prepare("DELETE FROM tl_iso_product WHERE pid=?")->execute($newRecord);
 			}
