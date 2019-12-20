@@ -2,7 +2,6 @@
 
 namespace IsotopeEvents\Backend\ProductCollection;
 
-
 use Contao\Model\Collection;
 use Isotope\Backend\ProductCollection\Callback;
 use Isotope\Isotope;
@@ -12,136 +11,133 @@ use Isotope\Model\ProductCollection\Order;
 class CustomCallback extends Callback
 {
 
-	/**
-	 * Generate the order label and return it as string
-	 *
-	 * @param array          $row
-	 * @param string         $label
-	 * @param \DataContainer $dc
-	 * @param array          $args
-	 *
-	 * @return array
-	 * @throws \Exception
-	 */
-	public function getOrderLabel($row, $label, \DataContainer $dc, $args)
-	{
-		/** @var Order $objOrder */
-		$objOrder = Order::findByPk($row['id']);
+    /**
+     * Generate the order label and return it as string
+     *
+     * @param array          $row
+     * @param string         $label
+     * @param \DataContainer $dc
+     * @param array          $args
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function getOrderLabel($row, $label, \DataContainer $dc, $args)
+    {
+        /** @var Order $objOrder */
+        $objOrder = Order::findByPk($row['id']);
 
-		if (null === $objOrder) {
-			return $args;
-		}
+        if (null === $objOrder) {
+            return $args;
+        }
 
-		// Override system to correctly format currencies etc
-		Isotope::setConfig($objOrder->getRelated('config_id'));
+        // Override system to correctly format currencies etc
+        Isotope::setConfig($objOrder->getRelated('config_id'));
 
-		$objAddress = $objOrder->getBillingAddress();
+        $objAddress = $objOrder->getBillingAddress();
 
-		if (null !== $objAddress) {
-			$arrTokens = $objAddress->getTokens(Isotope::getConfig()->getBillingFieldsConfig());
-			$args[2]   = $arrTokens['hcard_fn'];
-		}
+        if (null !== $objAddress) {
+            $arrTokens = $objAddress->getTokens(Isotope::getConfig()->getBillingFieldsConfig());
+            $args[2]   = $arrTokens['hcard_fn'];
+        }
 
-		$args[3] = Isotope::formatPriceWithCurrency($row['total']);
+        $args[3] = Isotope::formatPriceWithCurrency($row['total']);
 
-		/** @var \Isotope\Model\OrderStatus $objStatus */
-		if (($objStatus = $objOrder->getRelated('order_status')) !== null) {
-			$args[4] = '<span style="' . $objStatus->getColorStyles() . '">' . $objOrder->getStatusLabel() . '</span>';
-		} else {
-			$args[4] = '<span>' . $objOrder->getStatusLabel() . '</span>';
-		}
+        /** @var \Isotope\Model\OrderStatus $objStatus */
+        if (($objStatus = $objOrder->getRelated('order_status')) !== null) {
+            $args[4] = '<span style="' . $objStatus->getColorStyles() . '">' . $objOrder->getStatusLabel() . '</span>';
+        } else {
+            $args[4] = '<span>' . $objOrder->getStatusLabel() . '</span>';
+        }
 
-		$strNames = array();
+        $strNames = array();
 
-		foreach ($objOrder->getItems() as $objOrderItem) {
-			$strNames[] = $objOrderItem->getName();
-		}
+        foreach ($objOrder->getItems() as $objOrderItem) {
+            $strNames[] = $objOrderItem->getName();
+        }
 
-		$args[5] = sprintf('<span style="color: #a6a6a6;">%s</span>', implode(', ', $strNames));
+        $args[5] = sprintf('<span style="color: #a6a6a6;">%s</span>', implode(', ', $strNames));
 
-		return $args;
-	}
+        return $args;
+    }
 
-	public function generateEventsFilter()
-	{
-		/** @var Collection $orders */
-		$orders = Order::findBy(
-			['type = ?', 'order_status != ?', 'locked != ?'],
-			['order', '0', '']
-		);
+    public function generateEventsFilter()
+    {
+        /** @var Collection $orders */
+        $orders = Order::findBy(
+            ['type = ?', 'order_status != ?', 'locked != ?'],
+            ['order', '0', '']
+        );
 
-		$arrOptions = [];
+        $arrOptions = [];
 
-		/** @var Order $objOrder */
-		foreach ($orders as $objOrder) {
+        /** @var Order $objOrder */
+        foreach ($orders as $objOrder) {
+            foreach ($objOrder->getItems() as $objOrderItem) {
+                $objProduct = $objOrderItem->getProduct();
 
-			foreach ($objOrder->getItems() as $objOrderItem) {
+                // Only unique products in array
+                $arrOptions[$objProduct->getProductId()] = [
+                    'id' => $objProduct->getProductId(),
+                    'name' => sprintf(
+                        '[%s] %s',
+                        \Date::parse('d.m.Y', $objProduct->begin),
+                        $objProduct->getName()
+                    )
+                ];
+            }
+        }
 
-				$objProduct = $objOrderItem->getProduct();
+        $session = \Session::getInstance()->getData();
 
-				// Only unique products in array
-				$arrOptions[$objProduct->getProductId()] = [
-					'id' => $objProduct->getProductId(),
-					'name' => sprintf('[%s] %s',
-						\Date::parse('d.m.Y', $objProduct->begin),
-						$objProduct->getName()
-					)
-				];
-			}
-		}
-
-		$session = \Session::getInstance()->getData();
-
-		$strHtml = '<div class="tl_subpanel" style="width: 60%">
+        $strHtml = '<div class="tl_subpanel" style="width: 60%">
 		<strong>Filter events:</strong>
 		<select name="eventsFilter" id="eventsFilter" class="tl_select tl_chosen" style="width: 70%; margin-left: 3px;" onchange="this.form.submit();">
 		  <option value="eventsFilter">Event</option>
 		  <option value="eventsFilter">---</option>';
 
-		foreach ($arrOptions as $option) {
-			$strHtml .= sprintf('<option value="%s"%s>%s</option>',
-				$option['id'],
-				($session['filter']['eventsFilter'] == $option['id']) ? ' selected' : '',
-				$option['name']);
-		}
+        foreach ($arrOptions as $option) {
+            $strHtml .= sprintf(
+                '<option value="%s"%s>%s</option>',
+                $option['id'],
+                ($session['filter']['eventsFilter'] == $option['id']) ? ' selected' : '',
+                $option['name']
+            );
+        }
 
-		$strHtml .= '</select></div>';
+        $strHtml .= '</select></div>';
 
-		return $strHtml;
-	}
+        return $strHtml;
+    }
 
-	public function applyEventsFilter()
-	{
-		$session = \Session::getInstance()->getData();
+    public function applyEventsFilter()
+    {
+        $session = \Session::getInstance()->getData();
 
-		if (\Input::post('FORM_SUBMIT') == 'tl_filters') {
+        if (\Input::post('FORM_SUBMIT') == 'tl_filters') {
+            $session['filter']['eventsFilter'] = \Input::post('eventsFilter');
+            \Session::getInstance()->setData($session);
+        }
 
-			$session['filter']['eventsFilter'] = \Input::post('eventsFilter');
-			\Session::getInstance()->setData($session);
-		}
+        if (\Input::post('filter_reset')) {
+            $session['filter']['eventsFilter'] = 'eventsFilter';
+            \Session::getInstance()->setData($session);
+        }
 
-		if (\Input::post('filter_reset')) {
+        if ($session['filter']['eventsFilter'] != 'eventsFilter') {
 
-			$session['filter']['eventsFilter'] = 'eventsFilter';
-			\Session::getInstance()->setData($session);
-		}
+            /** @var Product $objProduct */
+            if ($objProduct = Product::findByPk($session['filter']['eventsFilter'])) {
+                $arrVariants = $objProduct->getVariantIds();
 
-		if ($session['filter']['eventsFilter'] != 'eventsFilter') {
+                $arrVariants[] = $objProduct->getId();
 
-			/** @var Product $objProduct */
-			if ($objProduct = Product::findByPk($session['filter']['eventsFilter'])) {
-				$arrVariants = $objProduct->getVariantIds ();
+                $res = \Database::getInstance()
+                    ->query('SELECT id FROM tl_iso_product_collection WHERE id IN (SELECT pid FROM tl_iso_product_collection_item WHERE product_id IN (' . implode(',', $arrVariants) . '))');
 
-				$arrVariants[] = $objProduct->getId ();
-
-				$res = \Database::getInstance ()
-					->query ('SELECT id FROM tl_iso_product_collection WHERE id IN (SELECT pid FROM tl_iso_product_collection_item WHERE product_id IN (' . implode (',', $arrVariants) . '))');
-
-				$GLOBALS['TL_DCA']['tl_iso_product_collection']['list']['sorting']['filter'][] =
-					['id IN (' . implode (',', $res->fetchEach ('id')) . ')', ''];
-			}
-		}
-
-	}
-
+                $GLOBALS['TL_DCA']['tl_iso_product_collection']['list']['sorting']['filter'][] =
+                    ['id IN (' . implode(',', $res->fetchEach('id')) . ')', ''];
+            }
+        }
+    }
 }

@@ -13,7 +13,6 @@ namespace Isotope\Model;
 
 use Isotope\Translation;
 
-
 /**
  * @property int    $id
  * @property string $name
