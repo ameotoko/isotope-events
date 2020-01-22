@@ -50,6 +50,26 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['location'] = array(
   'attributes'            => array('legend'=>'general_legend'),
 );
 
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['location_override'] = array(
+  'label' => ['Override location note', 'If selected, the text below will be used'],
+  'exclude' => true,
+  'inputType' => 'checkbox',
+  'eval' => ['submitOnChange'=>true],
+  'sql' => 'char(1) NOT NULL default ""',
+  'attributes' => array('legend'=>'general_legend')
+
+);
+
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['location_note'] = array(
+    'label' => ['Note'],
+    'filter' => false,
+    'search' => true,
+    'inputType' => 'textarea',
+    'eval' => array('rte' => 'tinyMCE', 'tl_class' => 'clr'),
+    'sql' => "text NULL",
+    'attributes' => array('legend'=>'general_legend')
+);
+
 // Concert datetime attribute
 $GLOBALS['TL_DCA']['tl_iso_product']['list']['label']['label_callback'] = array('Isotope\Backend\Product\CustomLabel', 'generate');
 $GLOBALS['TL_DCA']['tl_iso_product']['fields']['begin']['sorting'] = true;
@@ -59,7 +79,7 @@ $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['fields'] = ['begin'];
 if (!\Input::get('id')) {
     $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panelLayout'] = str_replace(';filter;', ';filter,past;', $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panelLayout']);
     $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panel_callback']['past'] = ['Isotope\Backend\Product\CustomPanel', 'add_filter'];
-    
+
     $GLOBALS['TL_DCA']['tl_iso_product']['config']['onload_callback']['past'] = ['Isotope\Backend\Product\CustomPanel', 'apply_filter'];
 }
 
