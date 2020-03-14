@@ -8,11 +8,9 @@ class CustomPanel extends \Backend
     {
         $session = \Session::getInstance()->getData();
 
-        $strBuffer = '<div class="tl_filter tl_subpanel">';
+        $strBuffer = '<div class="tl_filter tl_subpanel" style="margin: 6px 0;">';
         $strBuffer .= '<strong>Show past events: </strong>';
-        $strBuffer .= '<select name="pastFilter" id="pastFilter" class="tl_select'.(($session['filter']['pastFilter']) ? ' active' : '').'" onchange="this.form.submit();">';
-        $strBuffer .=	'<option value="0">Show</option><option value="1"'.(($session['filter']['pastFilter']) ? ' selected' : '').'>Hide</option>';
-        $strBuffer .= '</select>';
+        $strBuffer .= '<input type="checkbox" name="pastFilter" value="1" onchange="this.form.submit();"'.($session['filter']['pastFilter'] ? ' checked' : '').'>';
         $strBuffer .= '</div>';
 
         return $strBuffer;
@@ -23,11 +21,11 @@ class CustomPanel extends \Backend
         $session = \Session::getInstance()->getData();
 
         if (\Input::post('FORM_SUBMIT') == 'tl_filters') {
-            $session['filter']['pastFilter'] = \Input::post('pastFilter');
+            $session['filter']['pastFilter'] = \Input::post('pastFilter') ? '1' : '0';
             \Session::getInstance()->setData($session);
         }
 
-        if ($session['filter']['pastFilter'] == 1) {
+        if ($session['filter']['pastFilter'] == 0) {
             $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['filter'][] = ['begin>=?', time()];
         }
     }
