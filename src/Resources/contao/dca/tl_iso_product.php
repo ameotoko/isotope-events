@@ -29,10 +29,12 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['addtime'] = array(
 );
 
 $GLOBALS['TL_DCA']['tl_iso_product']['fields']['available'] = array(
-    'label'							=> &$GLOBALS['TL_LANG']['tl_iso_product']['available'],
+    'label'							=> &$GLOBALS['TL_LANG']['tl_iso_product']['availability'],
     'exclude'						=> false,
-    'inputType'					=> 'checkbox',
-    'sql'								=> "char(1) not null default ''",
+    'inputType'					=> 'select',
+    'options' => ['available', 'unavailable', 'full'],
+    'reference' => &$GLOBALS['TL_LANG']['tl_iso_product'],
+    'sql'								=> "char(16) not null default ''",
     'eval'							=> array('tl_class'=>'w50'),
     'attributes'				=> array('legend' => 'publish_legend')
 );
