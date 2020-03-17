@@ -1,12 +1,18 @@
 <?php
 
+use Contao\Config;
+use Contao\Date;
+use Contao\Image;
+use Contao\StringUtil;
+
 // Additional fields
 $GLOBALS['TL_DCA']['tl_iso_product']['fields']['begin'] = array(
     'label'							=> &$GLOBALS['TL_LANG']['tl_iso_product']['begin'],
     'exclude'						=> false,
     'inputType'					=> 'text',
     'sql'								=> 'int(10) unsigned',
-    'eval'							=> array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
+    'eval'							=> array('rgxp'=>'datim', 'tl_class'=>'w50 wizard'),
+    'wizard' => [['tl_iso_product', 'datePickerRange']],
     'attributes'				=> array('legend' => 'general_legend')
 );
 
@@ -101,3 +107,66 @@ if (\Input::get('do') == 'iso_products' && (!\Input::get('id') || \Input::get('a
 
 // Publish variants by default when copying a product
 $GLOBALS['TL_DCA']['tl_iso_product']['config']['oncopy_callback'][] = ['Isotope\Backend\Product\DcaManagerCustom', 'publishNewVariant'];
+
+class tl_iso_product extends Backend {
+
+    public function datePickerRange(DataContainer $dc) {
+        $arrData = $GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field];
+        $rgxp = $arrData['eval']['rgxp'];
+        $format = Date::formatToJs(Config::get($rgxp . 'Format'));
+
+        $GLOBALS['TL_JAVASCRIPT'][] = 'assets/datepicker-range/js/datepicker-range.js';
+        $GLOBALS['TL_CSS'][] = 'assets/datepicker-range/css/datepicker-range.css';
+
+        switch ($rgxp)
+        {
+            case 'datim':
+                $time = ",\n        timePicker: true";
+                break;
+
+            case 'time':
+                $time = ",\n        pickOnly: \"time\"";
+                break;
+
+            default:
+                $time = '';
+                break;
+        }
+
+        $strOnSelect = '';
+
+        // Trigger the auto-submit function (see #8603)
+        if ($arrData['eval']['submitOnChange'])
+        {
+            $strOnSelect = ",\n        onSelect: function() { Backend.autoSubmit(\"" . $dc->table . "\"); }";
+        }
+
+        return ' ' . Image::getHtml('assets/datepicker/images/icon.svg', '', 'title="' . StringUtil::specialchars($GLOBALS['TL_LANG']['MSC']['datepicker']) . '" id="toggle_' . $dc->field . '" style="cursor:pointer"') . '
+  <script>
+    window.addEvent("domready", function() {
+      new Picker.Date.Range($("ctrl_' . $dc->field . '"), {
+        endDateField: $("ctrl_end"),
+        draggable: false,
+        toggle: $("toggle_' . $dc->field . '"),
+        format: "' . $format . '",
+        positionOffset: {x:-211,y:-209}' . $time . ',
+        pickerClass: "datepicker_bootstrap",
+        columns: 1,
+        getStartEndDate: function(input) {
+            return [input.get("value"), this.options.endDateField.get("value")].map(function(date){
+            var parsed = Date.parse(date);
+            return Date.isValid(parsed) ? parsed : null;
+          }).clean();
+        },
+        setStartEndDate: function(input, dates){
+          input.set("value", dates[0].format(this.options.format));
+          this.options.endDateField.set("value", dates[1].format(this.options.format));
+        },
+        useFadeInOut: !Browser.ie' . $strOnSelect . ',
+        startDay: ' . $GLOBALS['TL_LANG']['MSC']['weekOffset'] . ',
+        titleFormat: "' . $GLOBALS['TL_LANG']['MSC']['titleFormat'] . '"
+      });
+    });
+  </script>';
+    }
+}
