@@ -159,7 +159,7 @@ $GLOBALS['TL_DCA']['tl_iso_location'] = array(
             'inputType'               => 'select',
             'eval'                    => array('includeBlankOption'=>true, 'chosen'=>true, 'tl_class'=>'w50'),
             'options_callback' => function () {
-                return System::getCountries();
+                return System::getContainer()->get(\Contao\CoreBundle\Intl\Countries::class)->getCountries();
             },
             'sql'                     => "varchar(2) NOT NULL default ''"
         ),

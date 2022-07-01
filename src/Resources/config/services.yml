@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autoconfigure: true
+
+    Ameotoko\IsotopeEvents\Migration\UppercaseLocationCountries:
+        arguments:
+            - '@doctrine.dbal.default_connection'
+        tags:
+            - { name: contao.migration }
