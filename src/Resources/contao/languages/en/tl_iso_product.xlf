@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+    <file>
+        <body>
+            <trans-unit id="tl_iso_product.begin.0">
+                <target>Event start date</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_product.begin.1">
+                <target>Date and time, when the event begins.</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_product.end.0">
+                <target>Event end date</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_product.end.1">
+                <target>Date and time, when the event ends.</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_product.addtime.0">
+                <target>Show time</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_product.addtime.1">
+                <target>If checked, frontend template should show time as well as date.</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_product.availability.0">
+                <target>Available</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_product.availability.1">
+                <target>If not available - visible in frontend, but without booking form. If booked out – a message is also displayed</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_product.available">
+                <target>Available</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_product.unavailable">
+                <target>Unavailable</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_product.full">
+                <target>Booked out</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_product.location.0">
+                <target>Location</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_product.location_override.0">
+                <target>Override location note</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_product.location_override.1">
+                <target>If selected, the text below will be used</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_product.location_note">
+                <target>Note</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

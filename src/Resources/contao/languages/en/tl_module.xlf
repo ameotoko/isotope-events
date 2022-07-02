@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+    <file>
+        <body>
+            <trans-unit id="tl_module.calendar_legend">
+                <target>Calendar settings</target>
+            </trans-unit>
+            <trans-unit id="tl_module.asCalendar.0">
+                <target>Display as calendar</target>
+            </trans-unit>
+            <trans-unit id="tl_module.asCalendar.1">
+                <target>Use a calendar layout in frontend.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+    <file>
+        <body>
+            <trans-unit id="tl_iso_location.name.0">
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.name.1">
+                <target>Location name</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.street.0">
+                <target>Street</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.postal.0">
+                <target>Postal code</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.city.0">
+                <target>City</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.state.0">
+                <target>State</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.country.0">
+                <target>Country</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.published.0">
+                <target>Publish location</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.note.0">
+                <target>Note</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.note.1">
+                <target>Additional information, e.g. how to get there.</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.new.0">
+                <target>New location</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.edit.0">
+                <target>Edit location ID %s</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.copy.0">
+                <target>Copy location ID %s</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.cut.0">
+                <target>Cut location ID %s</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.delete.0">
+                <target>Delete location ID %s</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.show.0">
+                <target>Show details of location ID %s</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.publish_legend">
+                <target>Publishing settings</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.name_legend">
+                <target>Name settings</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.address_legend">
+                <target>Address details</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
