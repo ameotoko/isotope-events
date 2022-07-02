@@ -7,3 +7,10 @@ services:
             - '@doctrine.dbal.default_connection'
         tags:
             - { name: contao.migration }
+
+    Ameotoko\IsotopeEvents\EventListener\DatePickerRangeWizard: ~
+
+    Ameotoko\IsotopeEvents\EventListener\ProductLabelCallback:
+        arguments:
+            - '%kernel.project_dir%'
+            - '@contao.image.factory'
