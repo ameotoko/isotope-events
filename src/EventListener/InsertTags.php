@@ -6,9 +6,9 @@
  * Time: 18:21
  */
 
-namespace IsotopeEvents;
+namespace Ameotoko\IsotopeEvents\EventListener;
 
-class Helper
+class InsertTags
 {
     public static function replaceInsertTags($strTag, $blnCache = true)
     {

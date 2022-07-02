@@ -1,6 +1,6 @@
 <?php
 
-namespace IsotopeEvents\Module;
+namespace Ameotoko\IsotopeEvents\Module;
 
 use Contao\CoreBundle\Exception\PageNotFoundException;
 use Haste\Http\Response\HtmlResponse;

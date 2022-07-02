@@ -9,8 +9,9 @@
  * @license    https://opensource.org/licenses/lgpl-3.0.html
  */
 
-namespace Isotope\Model;
+namespace Ameotoko\IsotopeEvents\Model;
 
+use Contao\Model;
 use Isotope\Translation;
 
 /**
@@ -23,7 +24,7 @@ use Isotope\Translation;
  * @property $country
  * @property $note
  */
-class Location extends \Model
+class Location extends Model
 {
 
     /**

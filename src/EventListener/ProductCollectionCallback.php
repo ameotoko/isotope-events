@@ -1,6 +1,6 @@
 <?php
 
-namespace IsotopeEvents\Backend\ProductCollection;
+namespace Ameotoko\IsotopeEvents\EventListener;
 
 use Contao\Model\Collection;
 use Isotope\Backend\ProductCollection\Callback;
@@ -8,7 +8,7 @@ use Isotope\Isotope;
 use Isotope\Model\Product;
 use Isotope\Model\ProductCollection\Order;
 
-class CustomCallback extends Callback
+class ProductCollectionCallback extends Callback
 {
 
     /**

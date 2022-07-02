@@ -9,27 +9,37 @@
  * @license    https://opensource.org/licenses/lgpl-3.0.html
  */
 
-namespace Isotope\Backend\Product;
+namespace Ameotoko\IsotopeEvents\EventListener;
 
+use Contao\CoreBundle\Image\ImageFactoryInterface;
+use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\DataContainer;
+use Contao\Date;
+use Contao\StringUtil;
 use Haste\Util\Format;
 use Isotope\Model\Product;
 use Isotope\Model\ProductPrice;
 use Isotope\Model\ProductType;
+use Isotope\Model\TaxClass;
+use Symfony\Component\Filesystem\Path;
 
-class CustomLabel
+/**
+ * Generate product label in backend
+ *
+ * @Callback(table="tl_iso_product", target="list.label.label")
+ */
+class ProductLabelCallback
 {
+    private string $projectDir;
+    private ImageFactoryInterface $imageFactory;
 
-    /**
-     * Generate a product label and return it as HTML string
-     *
-     * @param array          $row
-     * @param string         $label
-     * @param \DataContainer $dc
-     * @param array          $args
-     *
-     * @return string
-     */
-    public function generate($row, $label, $dc, $args)
+    public function __construct(string $projectDir, ImageFactoryInterface $imageFactory)
+    {
+        $this->projectDir = $projectDir;
+        $this->imageFactory = $imageFactory;
+    }
+
+    public function __invoke(array $row, string $label, DataContainer $dc, array $args): array
     {
         $objProduct = Product::findByPk($row['id']);
 
@@ -56,23 +66,17 @@ class CustomLabel
         return $args;
     }
 
-    /**
-     * Generate image label for product.
-     *
-     * @param Product $objProduct
-     *
-     * @return string
-     */
-    public static function generateImage($objProduct)
+    private function generateImage(Product $objProduct): string
     {
-        $arrImages = deserialize($objProduct->images);
+        $arrImages = StringUtil::deserialize($objProduct->images);
 
         if (!empty($arrImages) && is_array($arrImages)) {
             foreach ($arrImages as $image) {
                 $strImage = 'isotope/' . strtolower(substr($image['src'], 0, 1)) . '/' . $image['src'];
+                $srcPath = Path::join($this->projectDir, $strImage);
 
-                if (is_file(TL_ROOT . '/' . $strImage)) {
-                    $size = @getimagesize(TL_ROOT . '/' . $strImage);
+                if (is_file($srcPath)) {
+                    $size = @getimagesize($srcPath);
 
                     $script = sprintf(
                         "Backend.openModalImage({'width':%s,'title':'%s','url':'%s'});return false",
@@ -87,7 +91,7 @@ class CustomLabel
                         '<a href="%s" onclick="%s"><img src="%s" alt="%s" align="left"></a>',
                         TL_FILES_URL . $strImage,
                         $script,
-                        TL_ASSETS_URL . \Image::get($strImage, 50, 50, 'proportional'),
+                        $this->imageFactory->create($srcPath, [50, 50, 'proportional'])->getUrl($this->projectDir),
                         $image['alt']
                     );
                 }
@@ -97,20 +101,11 @@ class CustomLabel
         return '&nbsp;';
     }
 
-    /**
-     * Generate name label for product with link to variants if enabled.
-     *
-     * @param array          $row
-     * @param Product        $objProduct
-     * @param \DataContainer $dc
-     *
-     * @return string
-     */
-    private function generateName($row, $objProduct, $dc)
+    private function generateName(array $row, Product $objProduct, DataContainer $dc): string
     {
         $date = sprintf(
             '<span style="color: #999;">%s</span><br>',
-            \Date::parse('d F Y, H:i', $objProduct->begin)
+            Date::parse('d F Y, H:i', $objProduct->begin)
         );
 
         // Add a variants link
@@ -121,8 +116,8 @@ class CustomLabel
             /** @noinspection HtmlUnknownTarget */
             return sprintf(
                 $date.'<a href="%s" title="%s">%s</a>',
-                ampersand(\Environment::get('request')) . '&amp;id=' . $row['id'],
-                specialchars($GLOBALS['TL_LANG'][$dc->table]['showVariants']),
+                StringUtil::ampersand(\Environment::get('request')) . '&amp;id=' . $row['id'],
+                StringUtil::specialchars($GLOBALS['TL_LANG'][$dc->table]['showVariants']),
                 $objProduct->name
             );
         }
@@ -130,20 +125,13 @@ class CustomLabel
         return $date.$objProduct->name;
     }
 
-    /**
-     * Generate price label for product.
-     *
-     * @param array $row
-     *
-     * @return string
-     */
-    private function generatePrice($row)
+    private function generatePrice(array $row): string
     {
         $objPrice = ProductPrice::findPrimaryByProductId($row['id']);
 
         if (null !== $objPrice) {
             try {
-                /** @var \Isotope\Model\TaxClass $objTax */
+                /** @var TaxClass $objTax */
                 $objTax = $objPrice->getRelated('tax_class');
                 $strTax = (null === $objTax ? '' : ' (' . $objTax->getName() . ')');
 
@@ -156,16 +144,7 @@ class CustomLabel
         return '';
     }
 
-    /**
-     * Generate variant fields for product.
-     *
-     * @param string         $label
-     * @param Product        $objProduct
-     * @param \DataContainer $dc
-     *
-     * @return string
-     */
-    private function generateVariantFields($label, $objProduct, $dc)
+    private function generateVariantFields(string $label, Product $objProduct, DataContainer $dc): string
     {
         $attributes = [];
 

@@ -1,6 +1,8 @@
 <?php
 
-$GLOBALS['TL_DCA']['tl_iso_product_collection']['list']['label']['label_callback'] = ['IsotopeEvents\Backend\ProductCollection\CustomCallback', 'getOrderLabel'];
+use Ameotoko\IsotopeEvents\EventListener\ProductCollectionCallback;
+
+$GLOBALS['TL_DCA']['tl_iso_product_collection']['list']['label']['label_callback'] = [ProductCollectionCallback::class, 'getOrderLabel'];
 
 // We need to use on of existing fields and replace it with our contents, so we don't alter the table
 $GLOBALS['TL_DCA']['tl_iso_product_collection']['list']['label']['fields'] = array('document_number', 'locked', 'billing_address_id', 'total', 'order_status', 'config_id');

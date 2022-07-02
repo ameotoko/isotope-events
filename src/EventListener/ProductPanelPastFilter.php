@@ -1,8 +1,8 @@
 <?php
 
-namespace Isotope\Backend\Product;
+namespace Ameotoko\IsotopeEvents\EventListener;
 
-class CustomPanel extends \Backend
+class ProductPanelPastFilter
 {
     public function add_filter()
     {

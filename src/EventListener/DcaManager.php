@@ -3,9 +3,9 @@
  * @author Andrey Vinichenko <andrey.vinichenko@gmail.com>
  */
 
-namespace Isotope\Backend\Product;
+namespace Ameotoko\IsotopeEvents\EventListener;
 
-class DcaManagerCustom extends DcaManager
+class DcaManager
 {
     /**
      * Publish variants by default when copying a product

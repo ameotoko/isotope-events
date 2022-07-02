@@ -9,16 +9,17 @@
  * @license    https://opensource.org/licenses/lgpl-3.0.html
  */
 
-namespace Isotope\Module;
+namespace Ameotoko\IsotopeEvents\Module;
 
 use Haste\Http\Response\HtmlResponse;
 use Haste\Input\Input;
 use Isotope\Model\Product;
+use Isotope\Module\ProductReader as ProductReaderBase;
 
 /**
  * Class ProductReader
  */
-class ProductReaderCustom extends ProductReader
+class ProductReader extends ProductReaderBase
 {
     /**
      * Generate module

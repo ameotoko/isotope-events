@@ -19,9 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Ameotoko\\IsotopeEvents\\": "src/",
-      "Isotope\\": "src/Resources/contao/library/Isotope/",
-      "IsotopeEvents\\": "src/Resources/contao/library/IsotopeEvents/"
+      "Ameotoko\\IsotopeEvents\\": "src/"
     }
   },
   "extra": {

@@ -1,5 +1,8 @@
 <?php
 
+use Ameotoko\IsotopeEvents\EventListener\DcaManager;
+use Ameotoko\IsotopeEvents\EventListener\ProductPanelPastFilter;
+use Ameotoko\IsotopeEvents\Model\Location;
 use Contao\Config;
 use Contao\Date;
 use Contao\Image;
@@ -86,9 +89,9 @@ $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['fields'] = ['begin'];
 // Custom filter: Show/Hide past events
 if (!\Input::get('id')) {
     $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panelLayout'] = str_replace(';filter;', ';filter,past;', $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panelLayout']);
-    $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panel_callback']['past'] = ['Isotope\Backend\Product\CustomPanel', 'add_filter'];
+    $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panel_callback']['past'] = [ProductPanelPastFilter::class, 'add_filter'];
 
-    $GLOBALS['TL_DCA']['tl_iso_product']['config']['onload_callback']['past'] = ['Isotope\Backend\Product\CustomPanel', 'apply_filter'];
+    $GLOBALS['TL_DCA']['tl_iso_product']['config']['onload_callback']['past'] = [ProductPanelPastFilter::class, 'apply_filter'];
 }
 
 // Use content elements in products
@@ -106,7 +109,7 @@ if (\Input::get('do') == 'iso_products' && (!\Input::get('id') || \Input::get('a
 }
 
 // Publish variants by default when copying a product
-$GLOBALS['TL_DCA']['tl_iso_product']['config']['oncopy_callback'][] = ['Isotope\Backend\Product\DcaManagerCustom', 'publishNewVariant'];
+$GLOBALS['TL_DCA']['tl_iso_product']['config']['oncopy_callback'][] = [DcaManager::class, 'publishNewVariant'];
 
 class tl_iso_product extends Backend {
 
