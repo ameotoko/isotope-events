@@ -15,6 +15,7 @@ use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\DataContainer;
 use Contao\Date;
+use Contao\Image\ResizeConfiguration;
 use Contao\StringUtil;
 use Haste\Util\Format;
 use Isotope\Isotope;
@@ -86,13 +87,20 @@ class ProductLabelCallback
                         TL_FILES_URL . $strImage
                     );
 
+                    $resizeConfig = (new ResizeConfiguration())
+                        ->setWidth(50)
+                        ->setHeight(50)
+                        ->setMode(ResizeConfiguration::MODE_CROP)
+                        ->setZoomLevel(90)
+                    ;
+
                     /** @noinspection BadExpressionStatementJS */
                     /** @noinspection HtmlUnknownTarget */
                     return sprintf(
                         '<a href="%s" onclick="%s"><img src="%s" alt="%s" align="left"></a>',
                         TL_FILES_URL . $strImage,
                         $script,
-                        $this->imageFactory->create($srcPath, [50, 50, 'proportional'])->getUrl($this->projectDir),
+                        $this->imageFactory->create($srcPath, $resizeConfig)->getUrl($this->projectDir),
                         $image['alt']
                     );
                 }
