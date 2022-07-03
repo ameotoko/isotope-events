@@ -1,7 +1,6 @@
 <?php
 
 use Ameotoko\IsotopeEvents\EventListener\DcaManager;
-use Ameotoko\IsotopeEvents\EventListener\ProductPanelPastFilter;
 use Ameotoko\IsotopeEvents\Model\Location;
 use Contao\ArrayUtil;
 use Contao\Input;
@@ -79,12 +78,7 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['begin']['sorting'] = true;
 $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['fields'] = ['begin'];
 
 // Custom filter: Show/Hide past events
-if (!Input::get('id')) {
-    $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panelLayout'] = str_replace(';filter;', ';filter,past;', $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panelLayout']);
-    $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panel_callback']['past'] = [ProductPanelPastFilter::class, 'add_filter'];
-
-    $GLOBALS['TL_DCA']['tl_iso_product']['config']['onload_callback']['past'] = [ProductPanelPastFilter::class, 'apply_filter'];
-}
+$GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panelLayout'] = str_replace(';filter;', ';filter,past;', $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['panelLayout']);
 
 // Use content elements in products
 if (Input::get('do') == 'iso_products' && (!Input::get('id') || Input::get('act') == 'copy' || Input::get('act') == 'delete')) {

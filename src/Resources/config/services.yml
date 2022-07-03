@@ -14,3 +14,7 @@ services:
         arguments:
             - '%kernel.project_dir%'
             - '@contao.image.factory'
+
+    Ameotoko\IsotopeEvents\EventListener\ProductPanelPastFilter:
+        arguments:
+            - '@request_stack'
