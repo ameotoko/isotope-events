@@ -17,6 +17,7 @@ use Contao\DataContainer;
 use Contao\Date;
 use Contao\StringUtil;
 use Haste\Util\Format;
+use Isotope\Isotope;
 use Isotope\Model\Product;
 use Isotope\Model\ProductPrice;
 use Isotope\Model\ProductType;
@@ -135,7 +136,7 @@ class ProductLabelCallback
                 $objTax = $objPrice->getRelated('tax_class');
                 $strTax = (null === $objTax ? '' : ' (' . $objTax->getName() . ')');
 
-                return $objPrice->getValueForTier(1) . $strTax;
+                return Isotope::formatPriceWithCurrency($objPrice->getValueForTier(1)) . $strTax;
             } catch (\Exception $e) {
                 return '';
             }
