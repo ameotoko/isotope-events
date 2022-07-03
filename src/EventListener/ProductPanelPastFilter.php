@@ -53,7 +53,7 @@ class ProductPanelPastFilter
         }
 
         if ($filters['pastFilter'] == 0) {
-            $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['filter'][] = ['begin>=?', time()];
+            $GLOBALS['TL_DCA']['tl_iso_product']['list']['sorting']['filter']['past'] = ['begin>=?', time()];
         }
     }
 }
