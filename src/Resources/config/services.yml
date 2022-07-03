@@ -18,3 +18,10 @@ services:
     Ameotoko\IsotopeEvents\EventListener\ProductPanelPastFilter:
         arguments:
             - '@request_stack'
+
+    Ameotoko\IsotopeEvents\EventListener\OrderPanelMasterclassFilter:
+        arguments:
+            - '@request_stack'
+            - '@doctrine.dbal.default_connection'
+
+    Ameotoko\IsotopeEvents\EventListener\OrderLabelCallback: ~
