@@ -8,7 +8,7 @@
   ],
   "type": "contao-bundle",
   "require": {
-    "php": "^7.4",
+    "php": "^7.4 || ^8.1",
     "contao/core-bundle": "^4.13",
     "isotope/isotope-core": "^2.8",
     "ameotoko/datepicker-range": "^1.0"
