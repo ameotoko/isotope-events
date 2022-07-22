@@ -1,6 +1,7 @@
 services:
     _defaults:
         autoconfigure: true
+        public: false
 
     Ameotoko\IsotopeEvents\Migration\UppercaseLocationCountries:
         arguments:
