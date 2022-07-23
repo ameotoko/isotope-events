@@ -11,10 +11,15 @@
 
 namespace Ameotoko\IsotopeEvents\Module;
 
-use Haste\Http\Response\HtmlResponse;
+use Contao\ContentModel;
+use Contao\CoreBundle\Exception\PageNotFoundException;
+use Contao\CoreBundle\Exception\ResponseException;
+use Contao\Environment;
 use Haste\Input\Input;
 use Isotope\Model\Product;
+use Isotope\Model\Product\AbstractProduct;
 use Isotope\Module\ProductReader as ProductReaderBase;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ProductReader
@@ -27,13 +32,17 @@ class ProductReader extends ProductReaderBase
      */
     protected function compile()
     {
-        global $objPage;
-        global $objIsotopeListPage;
+        $jumpTo = $GLOBALS['objIsotopeListPage'] ?: $GLOBALS['objPage'];
 
+        if ($jumpTo->iso_readerMode === 'none') {
+            throw new PageNotFoundException();
+        }
+
+        /** @var AbstractProduct $objProduct */
         $objProduct = Product::findAvailableByIdOrAlias(Input::getAutoItem('product'));
 
         if (null === $objProduct) {
-            $this->generate404();
+            throw new PageNotFoundException();
         }
 
         $arrElements = array();
@@ -72,41 +81,32 @@ class ProductReader extends ProductReaderBase
             'gallery'     => $this->iso_gallery ? : $objProduct->getType()->reader_gallery,
             'buttons'     => $this->iso_buttons,
             'useQuantity' => $this->iso_use_quantity,
-            'jumpTo'      => $objIsotopeListPage ? : $objPage,
-            'elements'    => $arrElements
+            'disableOptions' => $this->iso_disable_options,
+            'jumpTo'      => $jumpTo,
+            'elements'    => $arrElements,
         );
 
-        if (\Environment::get('isAjaxRequest')
-            && \Input::post('AJAX_MODULE') == $this->id
-            && \Input::post('AJAX_PRODUCT') == $objProduct->getProductId()
+        if (Environment::get('isAjaxRequest')
+            && Input::post('AJAX_MODULE') == $this->id
+            && Input::post('AJAX_PRODUCT') == $objProduct->getProductId()
+            && !$this->iso_disable_options
         ) {
             try {
-                $objResponse = new HtmlResponse($objProduct->generate($arrConfig));
-                $objResponse->send();
+                $output = $objProduct->generate($arrConfig);
             } catch (\InvalidArgumentException $e) {
                 return;
             }
+
+            throw new ResponseException(new Response($output));
         }
 
         $this->addMetaTags($objProduct);
         $this->addCanonicalProductUrls($objProduct);
 
         $this->Template->product       = $objProduct->generate($arrConfig);
-        $this->Template->product_id    = $this->getCssId($objProduct);
-        $this->Template->product_class = $this->getCssClass($objProduct);
+        $this->Template->product_id    = $objProduct->getCssId();
+        $this->Template->product_class = $objProduct->getCssClass();
         $this->Template->referer       = 'javascript:history.go(-1)';
         $this->Template->back          = $GLOBALS['TL_LANG']['MSC']['goBack'];
-    }
-
-    /**
-     * Generates a 404 page and stops page output.
-     */
-    private function generate404()
-    {
-        global $objPage;
-        /** @var \PageError404 $objHandler */
-        $objHandler = new $GLOBALS['TL_PTY']['error_404']();
-        $objHandler->generate($objPage->id);
-        exit;
     }
 }
