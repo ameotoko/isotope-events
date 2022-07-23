@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author Andrey Vinichenko <andrey.vinichenko@gmail.com>
+ */
+
 use Ameotoko\IsotopeEvents\EventListener\DcaManager;
 use Ameotoko\IsotopeEvents\Model\Location;
 use Contao\ArrayUtil;

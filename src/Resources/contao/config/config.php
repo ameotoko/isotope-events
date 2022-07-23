@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author Andrey Vinichenko <andrey.vinichenko@gmail.com>
+ */
+
 use Ameotoko\IsotopeEvents\EventListener\DcaManager;
 use Ameotoko\IsotopeEvents\EventListener\InsertTags;
 use Ameotoko\IsotopeEvents\Model\Location;
@@ -10,10 +14,10 @@ use Ameotoko\IsotopeEvents\Module\ProductReader;
 $GLOBALS['TL_MODELS'][Location::getTable()] = Location::class;
 $GLOBALS['BE_MOD']['isotope']['iso_setup']['tables'][] = 'tl_iso_location';
 
-$GLOBALS['ISO_MOD']['config']['location'] = array(
-  'tables'            => array('tl_iso_location'),
-  'icon'              => 'bundles/ameotokoisotopeevents/img/setup-locations.png',
-);
+$GLOBALS['ISO_MOD']['config']['location'] = [
+    'tables' => ['tl_iso_location'],
+    'icon' => 'bundles/ameotokoisotopeevents/img/setup-locations.png',
+];
 
 // Mini calendar module
 $GLOBALS['FE_MOD']['isotope']['iso_productlist'] = ProductListCalendar::class;
@@ -23,7 +27,7 @@ $GLOBALS['BE_MOD']['isotope']['iso_products']['tables'][] = 'tl_content';
 $GLOBALS['FE_MOD']['isotope']['iso_productreader'] = ProductReader::class;
 
 // Add option to format price as integer
-$GLOBALS['ISO_NUM']["10,000"]    = array(0, '.', ",");
+$GLOBALS['ISO_NUM']["10,000"] = [0, '.', ","];
 
 // Inserttags
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = [InsertTags::class, 'replaceInsertTags'];

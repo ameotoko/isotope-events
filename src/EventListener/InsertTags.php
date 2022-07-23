@@ -1,12 +1,12 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: andrey
- * Date: 15.04.2018
- * Time: 18:21
+ * @author Andrey Vinichenko <andrey.vinichenko@gmail.com>
  */
 
 namespace Ameotoko\IsotopeEvents\EventListener;
+
+use Contao\Date;
 
 class InsertTags
 {
@@ -21,6 +21,6 @@ class InsertTags
         // would be the most elegant, but is not reliable. Returns 'October 2017' from '2017/08/31'
         // return date('F Y', strtotime('next month'));
         $arrCurrentDate = getdate();
-        return \Date::parse('F Y', mktime(0, 0, 0, $arrCurrentDate['mon'] + 1));
+        return Date::parse('F Y', mktime(0, 0, 0, $arrCurrentDate['mon'] + 1));
     }
 }

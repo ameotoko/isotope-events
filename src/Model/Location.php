@@ -1,17 +1,13 @@
 <?php
 
 /**
- * Isotope eCommerce for Contao Open Source CMS
- *
- * Copyright (C) 2009-2016 terminal42 gmbh & Isotope eCommerce Workgroup
- *
- * @link       https://isotopeecommerce.org
- * @license    https://opensource.org/licenses/lgpl-3.0.html
+ * @author Andrey Vinichenko <andrey.vinichenko@gmail.com>
  */
 
 namespace Ameotoko\IsotopeEvents\Model;
 
 use Contao\Model;
+use Contao\StringUtil;
 use Isotope\Translation;
 
 /**
@@ -26,38 +22,32 @@ use Isotope\Translation;
  */
 class Location extends Model
 {
-
     /**
-     * Name of the current table
      * @var string
      */
     protected static $strTable = 'tl_iso_location';
 
     /**
-     * Return the localized order status name
-     * @return  string
+     * Return the localized name
      */
-    public function getName()
+    public function getName(): string
     {
         return Translation::get($this->name);
     }
 
     /**
-     * Return the localized order status name
-     * Do not use $this->getName(), the alias should not be localized
-     * @return  string
+     * Return the localized order status name.
+     * Do not use $this->getName(), the alias should not be localized.
      */
-    public function getAlias()
+    public function getAlias(): string
     {
-        return standardize($this->name);
+        return StringUtil::standardize($this->name);
     }
 
     /**
      * Get locations and return them as array
-     *
-     * @return array
      */
-    public static function getLocations()
+    public static function getLocations(): array
     {
         $arrLocations = array();
 
@@ -72,7 +62,7 @@ class Location extends Model
         return $arrLocations;
     }
 
-    public static function getLocation($id='')
+    public static function getLocation($id = ''): ?static
     {
         return static::findByPk($id);
     }
