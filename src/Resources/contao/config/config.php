@@ -4,8 +4,6 @@
  * @author Andrey Vinichenko <andrey.vinichenko@gmail.com>
  */
 
-use Ameotoko\IsotopeEvents\EventListener\DcaManager;
-use Ameotoko\IsotopeEvents\EventListener\InsertTags;
 use Ameotoko\IsotopeEvents\Model\Location;
 use Ameotoko\IsotopeEvents\Module\ProductListCalendar;
 use Ameotoko\IsotopeEvents\Module\ProductReader;
@@ -28,9 +26,3 @@ $GLOBALS['FE_MOD']['isotope']['iso_productreader'] = ProductReader::class;
 
 // Add option to format price as integer
 $GLOBALS['ISO_NUM']["10,000"] = [0, '.', ","];
-
-// Inserttags
-$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = [InsertTags::class, 'replaceInsertTags'];
-
-// Clean up variants in case of cancelled copying of product
-$GLOBALS['TL_HOOKS']['reviseTable'][] = [DcaManager::class, 'onReviseTable'];

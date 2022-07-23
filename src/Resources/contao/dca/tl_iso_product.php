@@ -96,6 +96,3 @@ if (Input::get('do') == 'iso_products' && (!Input::get('id') || Input::get('act'
         ]
     ]);
 }
-
-// Publish variants by default when copying a product
-$GLOBALS['TL_DCA']['tl_iso_product']['config']['oncopy_callback'][] = [DcaManager::class, 'publishNewVariant'];
