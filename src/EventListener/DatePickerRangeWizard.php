@@ -44,7 +44,7 @@ class DatePickerRangeWizard
         $strOnSelect = '';
 
         // Trigger the auto-submit function (see #8603)
-        if ($arrData['eval']['submitOnChange']) {
+        if ($arrData['eval']['submitOnChange'] ?? null) {
             $strOnSelect = ",\n        onSelect: function() { Backend.autoSubmit(\"" . $dc->table . "\"); }";
         }
 
