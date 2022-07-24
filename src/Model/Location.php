@@ -6,8 +6,10 @@
 
 namespace Ameotoko\IsotopeEvents\Model;
 
+use Contao\CoreBundle\Intl\Countries;
 use Contao\Model;
 use Contao\StringUtil;
+use Contao\System;
 use Isotope\Translation;
 
 /**
@@ -42,6 +44,13 @@ class Location extends Model
     public function getAlias(): string
     {
         return StringUtil::standardize($this->name);
+    }
+
+    public function getLocalizedCountry()
+    {
+        $countries = System::getContainer()->get(Countries::class)->getCountries();
+
+        return $countries[$this->country];
     }
 
     /**
