@@ -26,7 +26,7 @@ class ProductPanelPastFilter
         $filters = $sessionBag->get('filter');
 
         $strBuffer = '<div class="tl_filter tl_subpanel" style="margin: 6px 0;">';
-        $strBuffer .= '<label for="pastFilter"><strong>Show past events: </strong></label>';
+        $strBuffer .= '<label for="pastFilter"><strong>' . $GLOBALS['TL_LANG']['tl_iso_product']['showPastEvents'] . ': </strong></label>';
         $strBuffer .= sprintf('<input type="checkbox" id="pastFilter" name="pastFilter" value="1" onchange="this.form.submit();"%s>', $filters['pastFilter'] ? ' checked' : '');
         $strBuffer .= '</div>';
 

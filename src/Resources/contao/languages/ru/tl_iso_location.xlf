@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+    <file>
+        <body>
+            <trans-unit id="tl_iso_location.name.0">
+                <target>Название</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.name.1">
+                <target>Название места</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.street.0">
+                <target>Улица, дом</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.postal.0">
+                <target>Почтовый индекс</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.city.0">
+                <target>Город</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.state.0">
+                <target>Штат (область, земля)</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.country.0">
+                <target>Страна</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.published.0">
+                <target>Опубликовать</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.note.0">
+                <target>Информация</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.note.1">
+                <target>Дополнительная информация, напр. как добраться, дополнительные услуги на месте и т.д.</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.new.0">
+                <target>Добавить</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.edit.0">
+                <target>Редактировать ID %s</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.copy.0">
+                <target>Копировать ID %s</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.cut.0">
+                <target>Перенести ID %s</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.delete.0">
+                <target>Удалить ID %s</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.show.0">
+                <target>Показать детали ID %s</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.publish_legend">
+                <target>Настройки публикации</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.name_legend">
+                <target>Настройки названия</target>
+            </trans-unit>
+            <trans-unit id="tl_iso_location.address_legend">
+                <target>Адрес</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
