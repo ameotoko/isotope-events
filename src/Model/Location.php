@@ -71,7 +71,7 @@ class Location extends Model
         return $arrLocations;
     }
 
-    public static function getLocation($id = ''): ?static
+    public static function getLocation($id = ''): ?self
     {
         return static::findByPk($id);
     }
