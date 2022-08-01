@@ -36,10 +36,10 @@
                 <target>Распродано</target>
             </trans-unit>
             <trans-unit id="tl_iso_product.location.0">
-                <target>Локация</target>
+                <target>Место проведения</target>
             </trans-unit>
             <trans-unit id="tl_iso_product.location_override.0">
-                <target>Заменить доп. информацию локации</target>
+                <target>Заменить доп. информацию для места проведения</target>
             </trans-unit>
             <trans-unit id="tl_iso_product.location_override.1">
                 <target>Поставьте галочку, чтобы заменить описание этой локации для этого события другим текстом.</target>
