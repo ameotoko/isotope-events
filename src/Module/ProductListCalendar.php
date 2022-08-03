@@ -2,9 +2,9 @@
 
 namespace Ameotoko\IsotopeEvents\Module;
 
-use Contao\CoreBundle\Exception\PageNotFoundException;
 use Haste\Http\Response\HtmlResponse;
 use Isotope\Module\ProductList;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @property mixed       cal_startDay
@@ -71,7 +71,7 @@ class ProductListCalendar extends ProductList
                 $this->Date = new \Date();
             }
         } catch (\OutOfBoundsException $e) {
-            throw new PageNotFoundException('Page not found: ' . \Environment::get('uri'));
+            throw new NotFoundHttpException('Page not found: ' . \Environment::get('uri'));
         }
 
         $time = \Date::floorToMinute();

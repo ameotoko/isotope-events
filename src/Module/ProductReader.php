@@ -12,7 +12,6 @@
 namespace Ameotoko\IsotopeEvents\Module;
 
 use Contao\ContentModel;
-use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\CoreBundle\Exception\ResponseException;
 use Contao\Environment;
 use Haste\Input\Input;
@@ -20,6 +19,7 @@ use Isotope\Model\Product;
 use Isotope\Model\Product\AbstractProduct;
 use Isotope\Module\ProductReader as ProductReaderBase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class ProductReader
@@ -35,14 +35,14 @@ class ProductReader extends ProductReaderBase
         $jumpTo = $GLOBALS['objIsotopeListPage'] ?: $GLOBALS['objPage'];
 
         if ($jumpTo->iso_readerMode === 'none') {
-            throw new PageNotFoundException();
+            throw new NotFoundHttpException();
         }
 
         /** @var AbstractProduct $objProduct */
         $objProduct = Product::findAvailableByIdOrAlias(Input::getAutoItem('product'));
 
         if (null === $objProduct) {
-            throw new PageNotFoundException();
+            throw new NotFoundHttpException();
         }
 
         $arrElements = array();
