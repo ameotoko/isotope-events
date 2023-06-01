@@ -60,7 +60,7 @@ class Location extends Model
     {
         $arrLocations = array();
 
-        if (($objLocations = Location::findAll()) !== null) {
+        if (($objLocations = Location::findBy('published', true)) !== null) {
 
             /** @var Location $location */
             foreach ($objLocations as $location) {
