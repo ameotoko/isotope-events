@@ -26,7 +26,9 @@ class UppercaseLocationCountries extends AbstractMigration
 
     public function shouldRun(): bool
     {
-        return 0 < $this->connection
+        $schema = $this->connection->createSchemaManager();
+
+        return $schema->tablesExist('tl_iso_location') && 0 < $this->connection
             ->fetchOne("select count(country) from tl_iso_location where country regexp binary '[a-z]+'");
     }
 
